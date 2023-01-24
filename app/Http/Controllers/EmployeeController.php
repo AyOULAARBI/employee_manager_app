@@ -10,6 +10,6 @@ class EmployeeController extends Controller
 {
     function getAll(){
         $employees = Employee::all();
-        return view('Employees');
+        return view('Employees',['employees'=>$employees]);
     }
 }
