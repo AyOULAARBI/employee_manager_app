@@ -8,8 +8,99 @@ use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
-    function getAll(){
+    function index(){
         $employees = Employee::all();
-        return view('Employees',['employees'=>$employees]);
+        return view('Employees.index',['employees'=>$employees]);
+    }
+        /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('Employees.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+       
+        $this->validate($request,[
+            'registration_num' => 'required|numeric',
+        'full_name' => 'required',
+        'address' => 'required',
+        'city' => 'required',
+        'email' => 'required',
+        'phone' => 'required',
+        'departement' => 'required',
+        'hired_at' => 'required',
+        ]);
+        Employee::create($request->except('_token'));
+        return redirect()->route('employees.index')->with(['success'=>'Employee added successfully']);
+        // $emp = new Employee;
+        // $emp->registration_num = $request->registration_num;
+        // $emp->full_name = $request->full_name;
+        // $emp->address = $request->address;
+        // $emp->city = $request->city;
+        // $emp->email = $request->email;
+        // $emp->phone = $request->phone;
+        // $emp->departement = $request->departement;
+        // $emp->hired_ats = $request->hired_at;
+        // $emp->save();
+        
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request,$id)
+    {
+        Employee::delete('DELETE FROM EMPLOYEES WHERE id = ?',[$id]);
+        return redirect()->route('/admin/employees');
     }
 }
+
