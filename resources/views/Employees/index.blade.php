@@ -10,7 +10,7 @@
 
 @section('content')
 <div class="container">
-  @include('layouts.errors')
+  
   <div class="row">
     <div class="col-md-10 mx-auto">
     <div class="card">
@@ -38,19 +38,22 @@
               <td>{{$employee->departement}}</td>
               <td>{{$employee->hired_at}}</td>
               <td class="d-flex justify-content-center align-items-center" id="damned">
-                <a href={{route('employees.show',$employee->id)}} class="btn btn-sm btn-primary">
+                <a href="{{route('employees.show',$employee->id)}}" class="btn btn-sm btn-primary">
                   <i class="fas fa-eye"></i>
                 </a>
-                <a href={{route('employees.edit',$employee->id)}} class="btn btn-sm btn-warning mx-3">
+                <a href="{{route('employees.edit',$employee->id)}}" class="btn btn-sm btn-warning mx-3">
                   <i class="fas fa-pen"></i>
                 </a>
-                <form action={{route('employees.destroy',$employee->id)}}>
+                <a href="{{route('employees.destroy',$employee->id)}}" class="btn btn-sm btn-danger mx-3" id="delete">
+                <i class="fas fa-trash"></i>
+                </a>
+                <!-- <form action="{{route('employees.destroy',$employee->id)}}">
                   @method('DELETE')
                   @csrf
                   <button type="submit" class="btn btn-sm btn-danger">
                     <i class="fas fa-trash"></i>
                   </button>
-              </form>
+              </form> -->
               </td>
             </tr>
       @endforeach
@@ -97,6 +100,34 @@
                 ],
       }
     )
+    $('#delete').onClick(()=>{
+
+      Swal.fire({
+    title: 'Do you want to save the changes?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Save',
+    denyButtonText: `Don't save`,
+  }).then((result) => {
+    /* Read more about isConfirmed, isDenied below */
+    if (result.isConfirmed) {
+      Swal.fire('Saved!', '', 'success')
+    } else if (result.isDenied) {
+      Swal.fire('Changes are not saved', '', 'info')
+    }
+  })
+    })
   })
  </script>
+ @if(session()->has('success'))
+    <script>
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: "{{session()->get('success')}}",
+        showConfirmButton: false,
+        timer: 2300
+      })
+    </script>
+ @endif
 @endsection
