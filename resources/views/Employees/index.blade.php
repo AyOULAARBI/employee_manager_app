@@ -44,16 +44,16 @@
                 <a href="{{route('employees.edit',$employee->id)}}" class="btn btn-sm btn-warning mx-3">
                   <i class="fas fa-pen"></i>
                 </a>
-                <a href="{{route('employees.destroy',$employee->id)}}" class="btn btn-sm btn-danger mx-3" id="delete">
-                <i class="fas fa-trash"></i>
-                </a>
-                <!-- <form action="{{route('employees.destroy',$employee->id)}}">
+
+                <form id="{{$employee->id}}" action="{{route('employees.destroy',$employee->id)}}" method="POST">
                   @method('DELETE')
                   @csrf
-                  <button type="submit" class="btn btn-sm btn-danger">
-                    <i class="fas fa-trash"></i>
-                  </button>
-              </form> -->
+                </form>
+                <button 
+                onclick="clickHandler({{$employee->id}})"
+                type="submit" class="btn btn-sm btn-danger">
+                  <i class="fas fa-trash"></i>
+                </button>
               </td>
             </tr>
       @endforeach
@@ -99,25 +99,27 @@
                     },  
                 ],
       }
-    )
-    $('#delete').onClick(()=>{
-
+    )})
+    function clickHandler(x){
       Swal.fire({
-    title: 'Do you want to save the changes?',
-    showDenyButton: true,
-    showCancelButton: true,
-    confirmButtonText: 'Save',
-    denyButtonText: `Don't save`,
-  }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
-    if (result.isConfirmed) {
-      Swal.fire('Saved!', '', 'success')
-    } else if (result.isDenied) {
-      Swal.fire('Changes are not saved', '', 'info')
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById(x).submit();
+          // Swal.fire(
+          //   'Deleted!',
+          //   'Your file has been deleted.',
+          //   'success'
+          // )
+        }
+      })
     }
-  })
-    })
-  })
  </script>
  @if(session()->has('success'))
     <script>
