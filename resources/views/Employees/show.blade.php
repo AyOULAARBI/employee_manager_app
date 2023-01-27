@@ -9,8 +9,12 @@
     <div class="row">
         <div class="col-md-8 mx-auto">
             <div class="card">
-                <div class="card-header">
-                    <h3>show Employee</h3>
+                <div class="card-header text-center">
+                    <h2>{{$employee->full_name}}</h2>
+                    <div class="font-white-bold text-center">
+                        <a href="{{route('work.cert',$employee->id)}}" class="btn btn-outline-info">Work Certificate</a>
+                        <a href="{{route('vacation.req',$employee->id)}}" class="btn btn-outline-primary">vacation request</a>
+                    </div>
                 </div>
                 <div class="card-body">
                         <div class="form-group mb-3">
