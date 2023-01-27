@@ -32,75 +32,63 @@ class EmployeeController extends Controller
     {
        
         $this->validate($request,[
-            'registration_num' => 'required|numeric',
+            'registration_num' => 'required|numeric|unique:employees,registration_num',
         'full_name' => 'required',
         'address' => 'required',
         'city' => 'required',
-        'email' => 'required',
+        'email' => 'required|unique:employees',
         'phone' => 'required',
         'departement' => 'required',
         'hired_at' => 'required',
         ]);
         Employee::create($request->except('_token'));
         return redirect()->route('employees.index')->with(['success'=>'Employee added successfully']);
-        // $emp = new Employee;
-        // $emp->registration_num = $request->registration_num;
-        // $emp->full_name = $request->full_name;
-        // $emp->address = $request->address;
-        // $emp->city = $request->city;
-        // $emp->email = $request->email;
-        // $emp->phone = $request->phone;
-        // $emp->departement = $request->departement;
-        // $emp->hired_ats = $request->hired_at;
-        // $emp->save();
-        
-
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        $employee = Employee::where('id',$id)->first();
+        return view('Employees.show')->with(['employee'=>$employee]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        $employee = Employee::where('id',$id)->first();
+        return view('Employees.edit',['employee'=>$employee]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
-        //
+        $employee = Employee::where('id',$id)->first();
+        $this->validate($request,[
+            'registration_num' => 'required|numeric|unique:employees,registration_num,'.$employee->registration_num,
+        'full_name' => 'required',
+        'address' => 'required',
+        'city' => 'required',
+        'email' => 'required|unique:employees,email,'.$employee->email,
+        'phone' => 'required',
+        'departement' => 'required',
+        'hired_at' => 'required',
+    ]);
+        $employee->update($request->except('_token','_method'));
+        return redirect()->route('employees.index')->with(['success'=>'Employee updated successfully']);
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request,$id)
     {
-        Employee::delete('DELETE FROM EMPLOYEES WHERE id = ?',[$id]);
-        return redirect()->route('/admin/employees');
+        $employee = Employee::where('id',$id)->first();
+        $employee->delete();
+        return redirect()->route('employees.index')->with(['success'=>'Employee DELETED successfully']);
+    }
+    public function vacationReq($id){
+        $emp = Employee::where('id',$id)->first();
+        return view('Employees.vacationRequest')->with(['employee'=>$emp]);
+    }
+    public function workCert($id){
+        $emp = Employee::where('id',$id)->first();
+        return view('Employees.workCert')->with(['employee'=>$emp]);
     }
 }
 
