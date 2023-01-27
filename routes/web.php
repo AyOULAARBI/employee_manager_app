@@ -16,9 +16,11 @@ use App\Http\Controllers\EmployeeController;
 Route::get('/', function () {
     return view('welcome');
 });
-Auth::routes();
+Auth::routes(['register'=>false]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::prefix('admin')->middleware('auth')->group(function(){
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('employees','EmployeeController');
+    Route::get('/employees/workCert/{id}','EmployeeController@workCert')->name('work.cert');
+    Route::get('/employees/vacationReq/{id}','EmployeeController@vacationReq')->name('vacation.req');
 });
